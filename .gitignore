@@ -1,0 +1,8 @@
+HELP.md
+/backend/target/
+/backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### VS Code ###
+/backend/.vscode/
