@@ -13,6 +13,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: lksdjfslkajoiruqwoeikxcjkcvlxjoirutroeithkljlj4322039948324dsjjvljjsl9832u4zlkjjljj233
   
 
 # spring.jpa.hibernate.ddl-auto=update

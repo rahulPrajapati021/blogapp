@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.pranton.blog.services.AuthenticationService;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +50,21 @@ public class AuthenticationServiceImp implements AuthenticationService {
         .signWith(keys, Jwts.SIG.HS256)
         .compact();
     }
+
+    @Override
+    public UserDetails validateToken(String token) {
+        // TODO Auto-generated method stub
+        String username = extractUsername(token);
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+    private String extractUsername(String token) {
+        SecretKey keys = Keys.hmacShaKeyFor(secretKey.getBytes());
+        // Jws<Claims> signedClaims = Jwts.parser().keyLocator(key).build().parseSignedClaims(token);
+        // return signedClaims.getPayload().getSubject();
+        Jws<Claims> signedClaims = Jwts.parser().verifyWith(keys).build().parseSignedClaims(token);
+        return signedClaims.getPayload().getSubject();
+    }
+    
 
 }

@@ -10,6 +10,7 @@ import com.pranton.blog.entity.Category;
 import com.pranton.blog.repositories.CategoryRepository;
 import com.pranton.blog.services.CategoryService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,10 @@ public class CategoryServiceImp implements CategoryService {
         }
     }
 
-    
+    @Override
+    public Category getCategoryById(UUID id) {
+        // TODO Auto-generated method stub
+        return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
+    }
     
 }

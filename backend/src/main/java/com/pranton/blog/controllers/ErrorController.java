@@ -6,9 +6,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.pranton.blog.dto.ApiErrorResponse;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -40,5 +42,17 @@ public class ErrorController {
         ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder().status(HttpStatus.UNAUTHORIZED.value()).message(ex.getMessage()).build();
         return ResponseEntity.status(apiErrorResponse.getStatus()).body(apiErrorResponse);
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder().status(HttpStatus.NOT_FOUND.value()).message(ex.getMessage()).build();
+        return ResponseEntity.status(apiErrorResponse.getStatus()).body(apiErrorResponse);
+    }
+    
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handle(NoResourceFoundException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder().status(HttpStatus.NOT_FOUND.value()).message(ex.getMessage()).build();
+        return ResponseEntity.status(apiErrorResponse.getStatus()).body(apiErrorResponse);
+    }    
 
 }
