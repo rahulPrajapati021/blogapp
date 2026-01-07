@@ -4,5 +4,8 @@ HELP.md
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+/frontend/node_modules
+
+
 ### VS Code ###
 /backend/.vscode/
