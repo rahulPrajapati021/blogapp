@@ -1,5 +1,7 @@
 package com.pranton.blog.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.pranton.blog.entity.User;
 import com.pranton.blog.repositories.UserRepository;
@@ -19,9 +24,12 @@ import com.pranton.blog.security.BlogUserDetailsService;
 import com.pranton.blog.security.JwtAuthenticationFilter;
 import com.pranton.blog.services.AuthenticationService;
 
-@Configuration
-public class SecurityConfig {
+import lombok.AllArgsConstructor;
 
+@Configuration
+@AllArgsConstructor
+public class SecurityConfig {
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
          BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepository);
@@ -41,6 +49,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain security(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         return http
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
             .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
@@ -49,10 +60,21 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
             .requestMatchers("/docs/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
             .anyRequest().authenticated())
-        .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowedOrigins(List.of("http://localhost:5173"));
+        cors.setAllowedMethods(List.of("GET", "PUT", "POST", "PATCH", "DELETE"));
+        cors.setAllowCredentials(true);
+        cors.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cors);
+        return source;
     }
 
     @Bean

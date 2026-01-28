@@ -1,16 +1,49 @@
-# React + Vite
+# Pages - 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Public Pages - 
+1. Public feed 
+2. Trending Page
+3. Login / Register Page
 
-Currently, two official plugins are available:
+## Private Pages 
+1. Personal Info Page
+2. Create Post Page
+3. Draft Posts Page
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+// workflow - 
+a typical blog site have blogs 
+which any person can read 
 
-## React Compiler
+similar i want 
+any person can come & read blogs on our website 
+// only authenticated & authorized will be able to 
+post & draft new blogs 
+& comment on any blog. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+flow i can think of - 
+for authenticated (Private)
+there will be page - login & register for user creation 
+on user dashboard 
+he can view his posted posts
+draft posts 
+also on user account option we will give profile option (not so important right now)
+pages i can think of - 
+/login
+/register
+/dashboard
+/editPost/:id
+/createPost
+/editProfile/:id or can be settings 
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+for non authenticated + authenticated (Public) 
+people can come to website 
+land on public homepage 
+where popular & latest post will be displayed 
+popular people 
+and a search option to search 
+read articles after searching 
+
+/ (homepage) (trending page)
+/profile/:id (user pofile listing user posted blogs)
+/post/:id (to read a blog)
